@@ -6,6 +6,7 @@ import { FloatingEmojis } from "@/components/FloatingEmojis";
 import { Confetti } from "@/components/Confetti";
 import { Balloons } from "@/components/Balloons";
 import { FlyingMedia } from "@/components/FlyingMedia";
+import Music from "@/assets/birthday.mp3";
 
 const Index = () => {
   const [isStarted, setIsStarted] = useState(false);
@@ -39,7 +40,7 @@ const Index = () => {
     const audio = audioRef.current;
     if (audio) {
       audio.muted = !audio.muted;
-      setIsMuted(audio.muted);
+      setIsMuted(!audio.muted);
     }
   };
 
@@ -50,7 +51,7 @@ const Index = () => {
         ref={audioRef}
         loop
         muted={isMuted}
-        src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_9a18c60e4b.mp3?filename=birthday-music-10993.mp3"
+        src={Music}
       />
 
       {/* Animated gradient background */}
@@ -156,28 +157,33 @@ const Index = () => {
       <AnimatePresence>
         {isStarted && showMessage && (
           <motion.div
-            className="fixed top-6 sm:top-10 left-1/2 -translate-x-1/2 z-30 text-center px-4 sm:px-6 py-3 sm:py-4 rounded-2xl glass-strong shadow-2xl max-w-md sm:max-w-3xl mx-4"
+            className="fixed inset-x-0 top-4 sm:top-10 z-30 flex justify-center px-3 sm:px-6"
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
           >
-            <motion.h2
-              className="text-2xl sm:text-3xl md:text-5xl font-bold gradient-text mb-2"
-              animate={{ scale: [1, 1.05, 1] }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
+            <motion.div
+              className="text-center px-4 sm:px-6 py-3 sm:py-4 rounded-2xl glass-strong shadow-2xl w-full max-w-md sm:max-w-3xl mx-auto"
             >
-              🎉 Wishing You the Best Day Ever! 🎂
-            </motion.h2>
-            <p className="text-base sm:text-lg md:text-xl text-foreground/80 font-medium">
-              May your day be filled with joy, laughter, and magic moments! ✨
-            </p>
+              <motion.h2
+                className="text-lg xs:text-xl sm:text-3xl md:text-5xl font-bold gradient-text mb-2"
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: 'easeOut',
+                }}
+              >
+                🎉 Wishing You the Best Day Ever! 🎂
+              </motion.h2>
+              <p className="text-sm sm:text-lg md:text-xl text-foreground/80 font-medium">
+                May your day be filled with joy, laughter, and magic moments! ✨
+              </p>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
+
 
       {/* Mute / Unmute button */}
       {isStarted && (

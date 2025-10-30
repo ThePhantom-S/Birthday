@@ -6,8 +6,13 @@ import birthday2 from "@/assets/two.jpg";
 import birthday3 from "@/assets/three.jpg";
 import birthday4 from "@/assets/four.jpg";
 import birthday5 from "@/assets/five.jpg";
+import birthday6 from "@/assets/six.jpg";
+import birthday7 from "@/assets/seven.jpg";
+import birthday8 from "@/assets/eight.jpg";
 import video1 from "@/assets/vid_1.mp4";
 import video2 from "@/assets/vid_2.mp4";
+import video3 from "@/assets/vid_3.mp4";
+import video4 from "@/assets/vid_4.mp4";
 
 interface MediaItem {
   id: number;
@@ -20,8 +25,8 @@ interface MediaItem {
   delay: number;
 }
 
-const photos = [birthday1, birthday2, birthday3, birthday4, birthday5];
-const videos = [video1, video2];
+const photos = [birthday1, birthday2, birthday3, birthday4, birthday5, birthday6, birthday7, birthday8];
+const videos = [video1, video2, video3, video4];
 
 const allMedia = [
   ...photos.map(src => ({ src, type: "photo" as const })),
@@ -161,7 +166,7 @@ export const FlyingMedia = ({ isActive }: { isActive: boolean }) => {
       <AnimatePresence>
         {focusedIndex !== null && (
           <motion.div
-            className="fixed inset-0 z-[100] flex items-center justify-center px-2"
+            className="fixed inset-0 z-[100] flex items-center justify-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -171,41 +176,44 @@ export const FlyingMedia = ({ isActive }: { isActive: boolean }) => {
               onClick={handleClose}
             />
 
-            {/* Arrows */}
+            {/* Navigation */}
             <motion.button
               onClick={handlePrevious}
-              className="absolute left-2 md:left-6 z-[110] w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/20"
+              className="absolute left-4 md:left-8 z-[110] w-14 h-14 md:w-16 md:h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/20"
               whileHover={{ scale: 1.1, x: -4 }}
+              whileTap={{ scale: 0.95 }}
             >
-              <ChevronLeft className="w-6 h-6 md:w-8 md:h-8" />
+              <ChevronLeft className="w-7 h-7 md:w-9 md:h-9" />
             </motion.button>
 
             <motion.button
               onClick={handleNext}
-              className="absolute right-2 md:right-6 z-[110] w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/20"
+              className="absolute right-4 md:right-8 z-[110] w-14 h-14 md:w-16 md:h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/20"
               whileHover={{ scale: 1.1, x: 4 }}
+              whileTap={{ scale: 0.95 }}
             >
-              <ChevronRight className="w-6 h-6 md:w-8 md:h-8" />
+              <ChevronRight className="w-7 h-7 md:w-9 md:h-9" />
             </motion.button>
 
             {/* Close */}
             <motion.button
               onClick={handleClose}
-              className="absolute top-3 right-3 md:top-6 md:right-6 z-[110] w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/20"
-              whileHover={{ rotate: 90 }}
+              className="absolute top-4 right-4 md:top-8 md:right-8 z-[110] w-14 h-14 md:w-16 md:h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/20"
+              whileHover={{ scale: 1.1, rotate: 90 }}
+              whileTap={{ scale: 0.95 }}
             >
-              <X className="w-6 h-6 md:w-8 md:h-8" />
+              <X className="w-7 h-7 md:w-9 md:h-9" />
             </motion.button>
 
             {/* Counter */}
-            <motion.div className="absolute top-3 left-3 md:top-6 md:left-6 z-[110] px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs md:text-base">
+            <motion.div className="absolute top-4 left-4 md:top-8 md:left-8 z-[110] px-5 py-2.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white font-semibold text-sm md:text-base">
               {focusedIndex + 1} / {mediaItems.length}
             </motion.div>
 
             {/* Focused Media */}
             <motion.div
               key={focusedIndex}
-              className="relative z-[105] w-full max-w-[95vw] md:max-w-[90vw] max-h-[80vh]"
+              className="relative z-[105] max-w-[90vw] max-h-[80vh]"
               initial={{ scale: 0.85, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.85, opacity: 0, y: 20 }}
@@ -216,15 +224,17 @@ export const FlyingMedia = ({ isActive }: { isActive: boolean }) => {
                   <img
                     src={mediaItems[focusedIndex].src}
                     alt={`Memory ${focusedIndex + 1}`}
-                    className="w-full h-auto max-h-[80vh] object-contain"
+                    className="max-w-full max-h-[80vh] object-contain"
                     draggable={false}
                   />
                 ) : (
                   <video
                     src={mediaItems[focusedIndex].src}
-                    controls
                     autoPlay
-                    className="w-full h-auto max-h-[80vh] object-contain"
+                    muted
+                    loop
+                    playsInline
+                    className="max-w-full max-h-[80vh] object-contain"
                   />
                 )}
               </div>
@@ -233,13 +243,13 @@ export const FlyingMedia = ({ isActive }: { isActive: boolean }) => {
         )}
       </AnimatePresence>
 
-      {/* 🎉 Flying Grid */}
+      {/* Media Grid */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-[20] flex items-center justify-center">
         <div
           className="relative"
           style={{
             display: "grid",
-            gridTemplateColumns: `repeat(${cols}, ${cellSize}px)`,
+            gridTemplateColumns: `repeat(${cols}, 200px)`,
             gap: `${gap}px`,
             padding: `${containerPadding}px`,
             justifyContent: "center",
@@ -252,19 +262,29 @@ export const FlyingMedia = ({ isActive }: { isActive: boolean }) => {
               <motion.div
                 key={item.id}
                 className="pointer-events-auto cursor-pointer group relative"
-                style={{ width: `${cellSize}px`, height: `${cellSize}px` }}
+                style={{
+                  width: "200px",
+                  height: "200px",
+                  zIndex: isHovered ? 30 : 20,
+                }}
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{
                   scale: item.scale,
                   opacity: 1,
                   rotate: item.rotation,
                 }}
-                transition={{ duration: 1, delay: item.delay }}
+                transition={{
+                  duration: 1,
+                  delay: item.delay,
+                  ease: [0.4, 0, 0.2, 1],
+                }}
                 whileHover={{
                   scale: item.scale * 1.12,
                   rotate: item.rotation + 3,
                   y: -8,
+                  transition: { duration: 0.25 },
                 }}
+                whileTap={{ scale: item.scale * 1.05 }}
                 onHoverStart={() => setHoveredIndex(index)}
                 onHoverEnd={() => setHoveredIndex(null)}
                 onClick={() => handleMediaClick(index)}
@@ -276,6 +296,7 @@ export const FlyingMedia = ({ isActive }: { isActive: boolean }) => {
                       alt={`Memory ${index + 1}`}
                       className="w-full h-full object-cover"
                       draggable={false}
+                      loading="lazy"
                     />
                   ) : (
                     <video
@@ -293,6 +314,7 @@ export const FlyingMedia = ({ isActive }: { isActive: boolean }) => {
                       className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex items-end justify-center pb-2 pointer-events-none"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: isHovered ? 1 : 0 }}
+                      transition={{ duration: 0.2 }}
                     >
                       <div className="flex items-center gap-1 text-white text-[10px] md:text-xs font-semibold bg-black/40 px-2 py-1 rounded-full">
                         <ZoomIn className="w-3 h-3" />
