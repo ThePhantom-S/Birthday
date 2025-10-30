@@ -244,90 +244,93 @@ export const FlyingMedia = ({ isActive }: { isActive: boolean }) => {
       </AnimatePresence>
 
       {/* Media Grid */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none z-[20] flex items-center justify-center">
-        <div
-          className="relative"
+<div className="fixed inset-0 z-[20] pointer-events-none flex items-center justify-center">
+  <div
+    className="relative overflow-y-auto pointer-events-auto scroll-smooth"
+    style={{
+      display: "grid",
+      gridTemplateColumns: `repeat(${cols}, ${cellSize}px)`,
+      gap: `${gap}px`,
+      padding: `${containerPadding}px`,
+      justifyContent: "center",
+      alignContent: "start",
+      maxHeight: "100vh",
+      scrollBehavior: "smooth",
+    }}
+  >
+    {mediaItems.map((item, index) => {
+      const isHovered = hoveredIndex === index;
+
+      return (
+        <motion.div
+          key={item.id}
+          className="cursor-pointer group relative"
           style={{
-            display: "grid",
-            gridTemplateColumns: `repeat(${cols}, 200px)`,
-            gap: `${gap}px`,
-            padding: `${containerPadding}px`,
-            justifyContent: "center",
+            width: `${cellSize}px`,
+            height: `${cellSize}px`,
+            zIndex: isHovered ? 30 : 20,
           }}
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{
+            scale: item.scale,
+            opacity: 1,
+            rotate: item.rotation,
+          }}
+          transition={{
+            duration: 1,
+            delay: item.delay,
+            ease: [0.4, 0, 0.2, 1],
+          }}
+          whileHover={{
+            scale: item.scale * 1.12,
+            rotate: item.rotation + 3,
+            y: -8,
+            transition: { duration: 0.25 },
+          }}
+          whileTap={{ scale: item.scale * 1.05 }}
+          onHoverStart={() => setHoveredIndex(index)}
+          onHoverEnd={() => setHoveredIndex(null)}
+          onClick={() => handleMediaClick(index)}
         >
-          {mediaItems.map((item, index) => {
-            const isHovered = hoveredIndex === index;
+          <div className="w-full h-full rounded-xl border-4 border-white shadow-xl overflow-hidden relative bg-white">
+            {item.type === "photo" ? (
+              <img
+                src={item.src}
+                alt={`Memory ${index + 1}`}
+                className="w-full h-full object-cover"
+                draggable={false}
+                loading="lazy"
+              />
+            ) : (
+              <video
+                src={item.src}
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="w-full h-full object-cover"
+              />
+            )}
 
-            return (
+            {isSettled && (
               <motion.div
-                key={item.id}
-                className="pointer-events-auto cursor-pointer group relative"
-                style={{
-                  width: "200px",
-                  height: "200px",
-                  zIndex: isHovered ? 30 : 20,
-                }}
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{
-                  scale: item.scale,
-                  opacity: 1,
-                  rotate: item.rotation,
-                }}
-                transition={{
-                  duration: 1,
-                  delay: item.delay,
-                  ease: [0.4, 0, 0.2, 1],
-                }}
-                whileHover={{
-                  scale: item.scale * 1.12,
-                  rotate: item.rotation + 3,
-                  y: -8,
-                  transition: { duration: 0.25 },
-                }}
-                whileTap={{ scale: item.scale * 1.05 }}
-                onHoverStart={() => setHoveredIndex(index)}
-                onHoverEnd={() => setHoveredIndex(null)}
-                onClick={() => handleMediaClick(index)}
+                className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex items-end justify-center pb-2 pointer-events-none"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: isHovered ? 1 : 0 }}
+                transition={{ duration: 0.2 }}
               >
-                <div className="w-full h-full rounded-xl border-4 border-white shadow-xl overflow-hidden relative bg-white">
-                  {item.type === "photo" ? (
-                    <img
-                      src={item.src}
-                      alt={`Memory ${index + 1}`}
-                      className="w-full h-full object-cover"
-                      draggable={false}
-                      loading="lazy"
-                    />
-                  ) : (
-                    <video
-                      src={item.src}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      className="w-full h-full object-cover"
-                    />
-                  )}
-
-                  {isSettled && (
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex items-end justify-center pb-2 pointer-events-none"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: isHovered ? 1 : 0 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <div className="flex items-center gap-1 text-white text-[10px] md:text-xs font-semibold bg-black/40 px-2 py-1 rounded-full">
-                        <ZoomIn className="w-3 h-3" />
-                        <span>Tap to view</span>
-                      </div>
-                    </motion.div>
-                  )}
+                <div className="flex items-center gap-1 text-white text-[10px] md:text-xs font-semibold bg-black/40 px-2 py-1 rounded-full">
+                  <ZoomIn className="w-3 h-3" />
+                  <span>Tap to view</span>
                 </div>
               </motion.div>
-            );
-          })}
-        </div>
-      </div>
+            )}
+          </div>
+        </motion.div>
+      );
+    })}
+  </div>
+</div>
     </>
   );
 };
